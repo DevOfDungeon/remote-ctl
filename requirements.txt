@@ -1,0 +1,4 @@
+fastapi
+uvicorn[standard]
+psutil
+evdev; sys_platform == "linux"
