@@ -3,11 +3,14 @@ from contextlib import asynccontextmanager
 
 import psutil
 from fastapi import Depends, FastAPI, WebSocket, WebSocketDisconnect
+from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
 from . import protocol as p
 from .auth import require_token, token_ok
 from .backends import get_backend
+
+from pathlib import Path
 
 
 @asynccontextmanager
@@ -66,3 +69,5 @@ async def ws_input(ws: WebSocket):
                     dev.click(msg.b)
     except WebSocketDisconnect:
         pass
+
+app.mount("/", StaticFiles(directory=Path(__file__).parent / "static", html=True), name="static")
