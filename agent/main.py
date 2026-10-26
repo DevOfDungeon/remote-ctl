@@ -59,7 +59,10 @@ async def ws_input(ws: WebSocket):
                 continue
             match msg:
                 case p.Move():
-                    print("moving", msg.dx, msg.dy)   # temporary, remove later
                     dev.move(msg.dx, msg.dy)
+                case p.Scroll():
+                    dev.scroll(msg.dx, msg.dy)
+                case p.Click():
+                    dev.click(msg.b)
     except WebSocketDisconnect:
         pass
