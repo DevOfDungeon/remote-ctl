@@ -7,7 +7,7 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import ValidationError
 
 from . import protocol as p
-from .auth import require_token, token_ok
+from .auth import require_token, token_ok, locked_out, record_failure
 from .backends import get_backend
 
 from pathlib import Path
@@ -40,6 +40,10 @@ def stats():
 @app.websocket("/ws/input")
 async def ws_input(ws: WebSocket):
     await ws.accept()
+    ip = ws.client.host if ws.client else "unknown"
+    if locked_out(ip):
+        await ws.close(code=4429)
+        return
     try:
         first = await asyncio.wait_for(ws.receive_text(), timeout=5)
     except asyncio.TimeoutError:
@@ -48,6 +52,7 @@ async def ws_input(ws: WebSocket):
     except WebSocketDisconnect:
         return
     if not token_ok(first):
+        record_failure(ip)
         await ws.close(code=4401)
         return
 
