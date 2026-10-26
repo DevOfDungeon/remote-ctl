@@ -53,7 +53,13 @@ pad.addEventListener("touchmove", (ev) => {
   ev.preventDefault();
   const c = centroid(ev.touches);
   if (Math.hypot(c.x - startPos.x, c.y - startPos.y) > TAP_SLOP) moved = true;
-  send({ t: "move", dx: Math.round((c.x - last.x) * SENS), dy: Math.round((c.y - last.y) * SENS) });
+  const SCROLL_PX = 18;
+    const dx = c.x - last.x, dy = c.y - last.y;
+  if (ev.touches.length >= 2) {
+    send({ t: "scroll", dx: Math.round(dx / SCROLL_PX), dy: Math.round(dy / SCROLL_PX) });
+  } else {
+    send({ t: "move", dx: Math.round(dx * SENS), dy: Math.round(dy * SENS) });
+  }
   last = c;
 }, { passive: false });
 
