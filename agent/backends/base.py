@@ -13,5 +13,11 @@ class InputBackend(ABC):
     @abstractmethod
     def click(self, button: str) -> None: ...
 
+    @abstractmethod
+    def key(self, name: str, mods: "list[str] | tuple[str, ...]" = ()) -> None: ...
+
+    @abstractmethod
+    def type_text(self, text: str) -> None: ...
+
     def close(self) -> None:
         pass
