@@ -30,3 +30,29 @@ function connect() {
 function send(msg) { if (ready) ws.send(JSON.stringify(msg)); }
 
 connect();
+
+const SENS = 1.6;
+let last = null;
+
+function centroid(touches) {
+  let x = 0, y = 0;
+  for (const t of touches) { x += t.clientX; y += t.clientY; }
+  return { x: x / touches.length, y: y / touches.length };
+}
+
+pad.addEventListener("touchstart", (ev) => {
+  ev.preventDefault();
+  last = centroid(ev.touches);
+}, { passive: false });
+
+pad.addEventListener("touchmove", (ev) => {
+  ev.preventDefault();
+  const c = centroid(ev.touches);
+  send({ t: "move", dx: Math.round((c.x - last.x) * SENS), dy: Math.round((c.y - last.y) * SENS) });
+  last = c;
+}, { passive: false });
+
+pad.addEventListener("touchend", (ev) => {
+  ev.preventDefault();
+  if (ev.touches.length > 0) last = centroid(ev.touches); // a finger lifted, others remain
+}, { passive: false });
