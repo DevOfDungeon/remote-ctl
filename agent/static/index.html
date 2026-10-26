@@ -7,4 +7,37 @@
 
 <div id="pad"><span id="status">connecting…</span></div>
 
+<div id="slides" class="panel" hidden>
+  <button data-key="left">◀ Prev</button>
+  <button data-key="right">Next ▶</button>
+  <button data-key="f5">Start</button>
+  <button data-key="b">Blank</button>
+  <button data-key="esc">End</button>
+</div>
+
+<div id="keys" class="panel" hidden>
+  <input id="txt" autocomplete="off" autocapitalize="off" placeholder="type here">
+  <button id="sendtxt">Send</button>
+  <button data-key="enter">⏎</button>
+  <button data-key="backspace">⌫</button>
+  <button data-key="tab">Tab</button>
+  <button data-key="esc">Esc</button>
+  <button data-key="up">↑</button>
+  <button data-key="down">↓</button>
+  <button data-key="left">←</button>
+  <button data-key="right">→</button>
+  <button data-key="c" data-mods="ctrl">Ctrl+C</button>
+  <button data-key="v" data-mods="ctrl">Ctrl+V</button>
+</div>
+
+<nav id="bar">
+  <button data-panel="slides">Slides</button>
+  <button data-panel="keys">Keys</button>
+</nav>
+
+<script>
+  window.onerror = (msg, src, line) => {
+    document.getElementById("status").textContent = `JS error line ${line}: ${msg}`;
+  };
+</script>
 <script src="app.js"></script>

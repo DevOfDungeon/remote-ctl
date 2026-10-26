@@ -1,4 +1,17 @@
 html, body { margin: 0; height: 100%; background: #111; color: #888;
   font-family: system-ui, sans-serif; overscroll-behavior: none; }
-#pad { position: fixed; inset: 0; touch-action: none;
-  display: flex; align-items: center; justify-content: center; user-select: none; }
+
+#pad { position: fixed; inset: 0; touch-action: none; user-select: none;
+  display: flex; align-items: center; justify-content: center; }
+
+button, input { font-size: 16px; padding: 12px; border-radius: 8px;
+  border: 0; background: #333; color: #eee; }
+
+#bar { position: fixed; left: 0; right: 0; bottom: 0; display: flex; gap: 8px;
+  padding: 8px; background: #1b1b1b; z-index: 3; }
+#bar button { flex: 1; }
+
+.panel { position: fixed; left: 0; right: 0; bottom: 64px; display: flex;
+  flex-wrap: wrap; gap: 8px; padding: 8px; background: #222; z-index: 2; }
+.panel[hidden] { display: none; }
+#txt { flex: 1 1 60%; min-width: 0; }
