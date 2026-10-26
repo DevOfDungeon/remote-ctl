@@ -12,6 +12,10 @@ from .backends import get_backend
 
 from pathlib import Path
 
+import logging
+
+logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
+log = logging.getLogger("rc")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -42,6 +46,7 @@ async def ws_input(ws: WebSocket):
     await ws.accept()
     ip = ws.client.host if ws.client else "unknown"
     if locked_out(ip):
+        log.warning("locked out: %s", ip)
         await ws.close(code=4429)
         return
     try:
@@ -50,13 +55,17 @@ async def ws_input(ws: WebSocket):
         await ws.close(code=4408)
         return
     except WebSocketDisconnect:
+        log.info("client disconnected: %s", ip)
         return
     if not token_ok(first):
         record_failure(ip)
+        log.warning("bad token from %s", ip)
         await ws.close(code=4401)
         return
 
     await ws.send_text("ok")
+    log.info("client connected: %s", ip)
+
     dev = ws.app.state.input
     try:
         while True:
