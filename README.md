@@ -13,3 +13,4 @@ tap = click · two-finger tap = right click · two-finger drag = scroll
 
 ## Security
 Read docs/threat-model.md before exposing this beyond your LAN.
+The tool injects keyboard and mouse input, runs over plain HTTP in v0.1, and shouldn’t be exposed beyond a trusted network.
